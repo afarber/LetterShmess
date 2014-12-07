@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:ads="http://schemas.android.com/apk/lib/com.google.ads"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:orientation="vertical" >
+
+    <ImageView
+        android:id="@+id/mainMenuImage"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:src="@drawable/lettershmess" >
+    </ImageView>
+
+<!-- game.lettershmess.MainGameView
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:id="@+id/game"
+        android:layout_gravity="center"
+        android:background="#000"/-->
+    
+    <com.google.ads.AdView
+        android:id="@+id/ad"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        ads:adSize="BANNER"
+        ads:adUnitId="a151d29f4706abf"
+        ads:loadAdOnCreate="true" >
+    </com.google.ads.AdView>
+</RelativeLayout>

@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Леттершмесс</string>
+    <string name="action_settings">Settings</string>
+    <string name="ru_new_game">Новая игра</string>
+    <string name="ru_settings">Настройки...</string>
+    <string name="ru_loading">Загрузка словаря %1$,.2f</string>
+    <string name="ru_you">Вы</string>
+    <string name="ru_cancel">отменить</string>
+    <string name="ru_send">отправить</string>
+    <string name="ru_tap_the_screen">Для продолжения коснитесь экрана</string>
+    <string name="ru_not_your_move">Дождитесь своего хода!</string>
+    <string name="ru_already_used">Слово уже было!</string>
+    <string name="ru_word_contain">Это слово было в другом слове</string>
+    <string name="ru_not_dictionary">Слова нет в словаре</string>
+    <string name="ru_you_won">Вы выиграли!</string>
+    <string name="ru_you_lose">Вы проиграли!</string>
+    <string name="ru_abc33_unsorted">ОАИЕНРТКСЛВПМДУЬЗГБЫЦЯЙЧФХШЖЩЁЭЮЪ</string>
+</resources>
