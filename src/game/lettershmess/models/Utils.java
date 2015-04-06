@@ -1,17 +1,18 @@
 package game.lettershmess.models;
 
+import game.lettershmess.R;
+
 import java.io.BufferedReader;
-import java.io.BufferedWriter;
 import java.io.ByteArrayOutputStream;
-import java.io.File;
-import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.nio.charset.Charset;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Hashtable;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 import java.util.Random;
 import java.util.regex.Matcher;
@@ -31,14 +32,11 @@ import org.apache.http.util.EntityUtils;
 import android.content.Context;
 import android.content.res.AssetManager;
 import android.content.res.Resources;
-import android.os.Environment;
 import android.util.Log;
-import android.widget.Toast;
-
-import game.lettershmess.R;
 
 public class Utils {
 	public static final float AVG_WORD_LENGTH = 5.28f;//eng=4.24
+	private static final int LINES = 78542; // total number of lines in assets/runouns.txt
 	private static Map<String, Integer> LETTER_STATS = new HashMap<String, Integer>();
 
 	private static LetterStats[] Letters = new LetterStats[33];
@@ -75,51 +73,31 @@ public class Utils {
 		ArrayList<String> wordsDictionary = new ArrayList<String>();
 		AssetManager am = context.getAssets();
 		try {
-			InputStream is = am.open(filename);
-			ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
-			totalDictionaryWords = byteArrayOutputStream.size();
-			Log.i("UTILS", "totalDictionaryWords="+totalDictionaryWords);
-			wordIndex = 0;
-			percents = 0.0;
-			int i = is.read();
-			while (i != -1)
-			{
-				byteArrayOutputStream.write(i);
-				i = is.read();
-				wordIndex++;
-				percents = 100.0 * wordIndex / (804578 + 76182);//TODO: размер словаря
+			BufferedReader in = new BufferedReader(new InputStreamReader(am.open(filename), Charset.forName("cp1251")));
+			String line;
+			while((line = in.readLine()) != null) {
+				String word = line.toUpperCase();
+			    //Log.i("UTILS", "LINE: " + line);
+		   	    if( word.length() > 1 
+	   	    		 // TODO: remove these checks when the dictionary has been cleaned
+	   	    		 && !word.endsWith("ЕЕ")
+	   	    		 && !word.endsWith("ЫЙ")
+	   	    		 && !word.endsWith("ИЙ")
+	   	    		 && !word.endsWith("НАЯ")
+	   	    		 && !word.endsWith("КАЯ")
+	   	    		 && !word.endsWith("ШАЯ")
+	   	    		 && !word.endsWith("ОЕ")
+	   	    		 && !word.endsWith("ЯЯ")
+	   	    		 && word.indexOf("ЖЫ") == -1
+	   	    		 && word.indexOf("ШЫ") == -1
+	   	    		 ) {
+		   	    	 wordsDictionary.add(word);
+		   	    	 wordIndex++;
+		   	    	 percents = 100.0 * wordIndex / LINES;
+		   	    }
 			}
-			is.close();
-			Log.i("UTILS", "words="+wordIndex);
 			
-			//TODO:java.lang.OutOfMemoryError - sometimes!!! GC!
-			String content = byteArrayOutputStream.toString("cp1251");
-			Pattern p = Pattern.compile("(\\w+):"); 
-		   	Matcher m = p.matcher(content);
-		   	wordsDictionary = new ArrayList<String>();
-			Log.i("UTILS", "parsing...");
-			//wordIndex = 0;
-			//percents = 0.0;
-		   	while (m.find()) {   
-		   	     String w = m.group(1);
-		   	     if(w.length()>1 
-		   	    		 //TODO: убрать этот костыль, когда будет нормальный словарь
-		   	    		 && !w.toUpperCase().endsWith("ЕЕ")
-		   	    		 && !w.toUpperCase().endsWith("ЫЙ")
-		   	    		 && !w.toUpperCase().endsWith("ИЙ")
-		   	    		 && !w.toUpperCase().endsWith("НАЯ")
-		   	    		 && !w.toUpperCase().endsWith("КАЯ")
-		   	    		 && !w.toUpperCase().endsWith("ШАЯ")
-		   	    		 && !w.toUpperCase().endsWith("ОЕ")
-		   	    		 && !w.toUpperCase().endsWith("ЯЯ")
-		   	    		 )
-		   	    	 wordsDictionary.add(w);
-				wordIndex++;
-				percents = 100.0 * wordIndex / (804578 + 76182);
-		   	} 
-
-		   	byteArrayOutputStream.flush();
-		   	
+			in.close();
 			Log.i("UTILS", "parsed "+wordIndex);
 		} catch (IOException e) {
 			e.printStackTrace();
